@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="google-signin-client_id" content="418062095490-qoprggilj97vip96sj2i7t34gebunh7q.apps.googleusercontent.com">
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
+    <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Charmonman" rel="stylesheet">
+    <link rel="stylesheet" href="css/vueWysiwyg.css">
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+
+    <title>CurhatanQ</title>
+</head>
+
+<body>
+    <div id="app">
+
+        <div id="loginView" class="d-flex flex-row mainView" v-if="viewId === 1">
+            <div style="width:60%; height: 100%;" class="d-flex flex-column justify-content-center align-items-center">
+                <h1 id="app-title" class="text-white">CurhatanQ</h1>
+            </div>
+            <div style="width:40%; height: 100%;" class="d-flex flex-column justify-content-center">
+                <login-card @login="login" v-on:change-auth="changeAuth" v-if="wantLogin"></login-card>
+                <register-card @register="register" v-on:change-auth="changeAuth" v-if="!wantLogin"></register-card>
+            </div>
+        </div>
+        <div id="menuView" class="mainView d-flex flex-row justify-content-center align-items-center" v-if="viewId===2">
+            <mynav-button text="Write a Curhat" class="glow" @click.native="setViewId(3)">
+                <i class="text-white fas fa-feather-alt icon-large "></i>
+            </mynav-button>
+            <mynav-button text="My Curhats" class="glow" @click.native="setViewId(4)">
+                <i class="text-white fas fa-user-circle icon-large"></i>
+            </mynav-button>
+            <mynav-button text="Public Curhats" class="glow" @click.native="setViewId(5)">
+                <i class="text-white fas fa-user-friends icon-large"></i>
+            </mynav-button>
+            <mynav-button text="Log Out" class="glow" @click.native="logout">
+                <i class="text-white fas fa-power-off icon-large"></i>
+            </mynav-button>
+        </div>
+        <div id="writeCurhat" class="mainView" v-if="viewId===3">
+            <back-navigation title="Write a Curhat"></back-navigation>
+            <compose-view @add-to-my-curhat="addToMyCurhat" class="mx-auto"></compose-view>
+
+        </div>
+        <div id="myCurhatsView" class="mainView" v-if="viewId===4">
+            <back-navigation title="My Curhats"></back-navigation>
+            <curhat-list @show-pdf="showPdf" v-bind:curhats="myCurhats"></curhat-list>
+
+        </div>
+        <div id="publicCurhatsView" class="mainView" v-if="viewId===5">
+            <back-navigation title="Public Curhats"></back-navigation>
+            <curhat-list @show-pdf="showPdf" v-bind:curhats="publicCurhats"></curhat-list>
+        </div>
+        <div class="mainView" v-if="viewId===6">
+            <back-navigation title="Curhat Viewer"></back-navigation>
+            <iframe id="pdfViewer" class="w-100 h-100 mx-auto" :src="pdfSrc"></iframe>
+        </div>
+    </div>
+
+
+    <script src="//unpkg.com/@babel/polyfill@latest/dist/polyfill.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+
+    <!-- register components-->
+
+    <script src="components/back-navigation.js"></script>
+    <script src="components/curhat-data.js"></script>
+    <script src="components/curhat-list.js"></script>
+    <script src="components/mynav-button.js"></script>
+    <script src="components/login-card.js"></script>
+    <script src="components/register-card.js"></script>
+    
+    <script src="js/vueWysiwyg.js"></script>
+    <script src="components/compose-view.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+
+</html>
