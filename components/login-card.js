@@ -10,11 +10,26 @@ Vue.component('login-card', {
     },
     methods: {
         login(){
-            alert("login")
+
             let body = {
                 email:this.email,
                 password:this.password
             }
+            axios.post(`${baseurl}/signin`, body)
+            .then(result=>{
+                localStorage.token = result.data.token;
+                localStorage.userId = result.data.userId;
+                this.$emit('login');
+             
+            })
+            .catch(err=>{
+                // if(err.statusCode === 401){
+                //     this.errorMessage = err.response.data.message;
+                // }
+                console.log(err);
+                this.errorMessage = "invalid email/password"
+            })
+            
         }
     },
     template: `
@@ -25,7 +40,7 @@ Vue.component('login-card', {
         <b-card-body class="d-flex flex-column">   
             <input type="email" class=" mt-2" v-model="email" placeholder="Email..." required>
             <input type="password" class="f mt-2" v-model="password" placeholder="Password..." required>
-            <button @click="$emit('login')" type="submit" class="btn btn-primary mt-5">LOGIN</button>
+            <button @click="login" type="submit" class="btn btn-primary mt-5">LOGIN</button>
             <small class="text-danger">{{errorMessage}}</small>  
         </b-card-body>
         <b-card-footer class="d-flex-inline">

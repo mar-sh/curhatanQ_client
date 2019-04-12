@@ -11,17 +11,22 @@ Vue.component('register-card', {
     },
     methods: {
         register(){
-            alert("register")
+           
             let body = {
-                fullname:name,
-                email:email,
-                password:password
+                fullname:this.name,
+                email:this.email,
+                password:this.password
             }
-            axios.post(body)
+            axios.post(baseurl+"/register",body)
             .then(result=>{
-                
+       
+                localStorage.token = result.data.token;
+                localStorage.userId = result.data.userId;
+                this.$emit("register")
             })
-            .catch(err=>{})
+            .catch(err=>{
+                console.log(err)
+            })
         }
     },
     template: `

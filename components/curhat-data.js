@@ -1,38 +1,65 @@
 
 
 Vue.component('curhat-data', {
-    props:["curhat"],
+    props:["curhat","candelete"],
     computed:{
         getFacebookHref(){
-            return `https://www.facebook.com/sharer/sharer.php?u=`
+            return `https://www.facebook.com/sharer/sharer.php?u=${this.curhat.url}`
         },
         getTwitterHref(){
-            return `https://twitter.com/intent/tweet?text=Curhat+ini+bagus&amp;url=`
-        },
-        getCanDelete(curhatUserId){
-            return true;
-            if(curhatUserId != localStorage.userId){
-                return false;
-            }else{
-                return true;
-            }
+            return `https://twitter.com/intent/tweet?text=Curhat+ini+bagus&amp;url=${this.curhat.url}`
         }
     },
     methods: {
         viewDocument(){
-            alert("view document")
+        
             this.$emit("show-pdf", this.curhat.url)
             
         },
         deleteDocument(){
-            alert("delete document")
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+              }).then((result) => {
+                if (result.value) {
+                    axios({
+                        method:"DELETE",
+                        url: baseurl+"/curhatan/"+localStorage.userId+"/delete/"+this.curhat._id,
+                        headers:{
+                            token: localStorage.token
+                        }
+                    })
+                    .then(result=>{
+                        console.log("masu cuy")
+                        this.$emit("delete-success",this.curhat._id)
+                    })
+                    .catch(err=>{
+                        console.log(err.response);
+                    })
+                  Swal.fire(
+                    'Deleted!',
+                    'Your file has been deleted.',
+                    'success'
+                  )
+                }
+              })
+
+            //   console.log(baseurl+"/curhatan/"+localStorage.userId+"/delete/"+this.curhat._id)
+                    
+            
         }
     },
     template: `
         <div class="d-flex flex-column curhat-card">
             <div class="d-flex flex row justify-content-around align-items-center">
-                <a id="facebook-share" href="https://www.facebook.com/sharer/sharer.php?u=example.org" target="_blank"><i class="fab fa-facebook-f"></i></a>
-                <a id="twitter-share" class="twitter-share-button" href="https://twitter.com/intent/tweet?text=Hello" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a id="facebook-share" :href="getFacebookHref" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                <a id="twitter-share" class="twitter-share-button" :href="getTwitterHref" target="_blank"><i class="fab fa-twitter"></i></a>
             </div>
             <div class="d-flex flex row justify-content-around align-items-center">
                 <a id="linkedin-share"  target="_blank" title="Share on LinkedIn"><i class="fab fa-linkedin-in"></i></a>
@@ -41,7 +68,7 @@ Vue.component('curhat-data', {
             <p class="mt-4">{{curhat.title}}</p>
             <div class="d-flex flex row justify-content-around align-items-center">
                 <button @click="viewDocument" class="btn btn-primary btn-sm">View</button>
-                <button v-if="getCanDelete" @click="deleteDocument" class="btn btn-danger btn-sm">Delete</button>
+                <button v-if="candelete" @click="deleteDocument" class="btn btn-danger btn-sm">Delete</button>
             </div>
         </div>
     `,

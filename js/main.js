@@ -1,5 +1,6 @@
 
-var baseurl = "http://localhost:3000"
+var baseurl = "http://curhat-server.willyprayogo26.xyz"
+// var baseurl = "http://localhost:3000"
 console.log(baseurl)
 const app = new Vue({
     el: "#app",
@@ -10,7 +11,7 @@ const app = new Vue({
         isLogin: function (val) {
             if (this.isLogin) {
                 this.myCurhats = this.getMyCurhats();
-                this.myCurhats = this.getPublicCurhats();
+                this.publicCurhats = this.getPublicCurhats();
                 this.viewId = 2;
             } else {
                 this.myCurhats = [];
@@ -20,65 +21,92 @@ const app = new Vue({
         }
     },
     data: {
-        isLogin: true,
+        isLogin: "",
         wantLogin: true,
         pdfSrc:'',
-        viewId: 2,
+        viewId: 0,
         myCurhats: [],
         publicCurhats: []
     },
+    created: function () {
+      
+      if(localStorage.token){
+          this.isLogin = true
+      }else{
+        this.isLogin = false
+      }
+      },
     methods: {
         changeAuth() {
             this.wantLogin = !this.wantLogin;
         },
         setViewId(id) {
-            alert(id)
+           
             this.viewId = id;
         },
         login(){
+            console.log("masuk gaak")
+            
             this.isLogin = true;
         },
         logout(){
            
             this.isLogin = false;
-            alert("logout");
+      
             localStorage.removeItem("token")
             localStorage.removeItem("userId")
         },
         getMyCurhats(){
-            alert("getMyCurhat")
+            
             //this.myCurhats = data.articles
-            axios.get(baseurl+"/articles")
+            axios.get(baseurl+"/curhatan/my-curhat",{
+                headers:{
+                    token: localStorage.token
+                }
+            })
             .then(result=>{
-              this.myCurhats = result.data
+                console.log(result.data)
+               this.myCurhats = result.data
             })
             .catch(err=>{
               console.log(err)
             })
-        },
+         },
         getPublicCurhats(){
-            alert("getPublicCruhat")
+           
             //this.myCurhats = publicData.articles
-            axios.get(baseurl+"/articles")
+            axios.get(baseurl+"/curhatan",{
+                headers:{
+                    token: localStorage.token
+                }
+            })
             .then(result=>{
-              this.publicCurhats = result.data.filter(x=>x.isPublic===true)
+              this.publicCurhats = result.data
             })
             .catch(err=>{
               console.log(err)
             })
         },
         addToMyCurhat(objCurhat){
-            alert("AddToMyCurhat")
-            alert(objCurhat.title, objCurhat.description, objCurhat.isPublic)
+
             this.myCurhats.push(objCurhat)
+            this.getPublicCurhats();
             this.viewId=2;
+            Swal.fire({
+                
+                type: 'success',
+                title: 'Your curhat has been saved',
+                showConfirmButton: false,
+                timer: 1500
+              })
         },
-        deleteFromMyCurhat(_id){
-            alert("DeleteToMyCurhat")
+        deleteSuccess(_id){
+          
+            this.getMyCurhats();
+            this.getPublicCurhats();
         },
         showPdf(url){
-         alert("show pdf 2")
-         alert(url)
+     
           this.pdfSrc = url
           this.viewId = 6;     
         }
@@ -86,31 +114,7 @@ const app = new Vue({
     }
 })
 
-function onSignIn(googleUser) {
-    // Useful data for your client-side scripts:
-    axios.post(baseurl+"/login",{
-        id_token:id_token
-    })
-    .then(result=>{
-        app.isLogin = true
-        localStorage.token = result.data.token;
-        localStorage.userId = result.data.userId;
-    })
-    .catch(err=>{
-        
-    })
-    // The ID token you need to pass to your backend:
-    var id_token = googleUser.getAuthResponse().id_token;
-    console.log("ID Token: " + id_token);
-  }
-  function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      app.isLogin = false;
-      localStorage.removeItem("token");
-      localStorage.removeItem("userId");
-    });
-  }
+
 
 
 

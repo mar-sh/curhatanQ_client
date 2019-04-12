@@ -1,17 +1,19 @@
 Vue.component('curhat-list', {
-    props:["curhats"],
+    props:["curhats","candelete"],
     methods:{
         showPdf(url){
-            alert("show pdf 1")
-            alert(url)
+    
             this.$emit("show-pdf",url)
 
+        },
+        deleteSuccess(id){
+            this.$emit("delete-success", id)
         }
     },
     template: `      
     <div class="d-flex flex-row flex-wrap p-4">
         <div v-for="curhat in curhats">
-            <curhat-data @show-pdf="showPdf" class="m-2" v-bind:curhat="curhat"></curhat-data>
+            <curhat-data @show-pdf="showPdf" :candelete="candelete" @delete-success="deleteSuccess" class="m-2" v-bind:curhat="curhat"></curhat-data>
         </div>
     </div>
     `,

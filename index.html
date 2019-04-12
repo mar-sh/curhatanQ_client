@@ -5,17 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <meta name="google-signin-client_id" content="418062095490-qoprggilj97vip96sj2i7t34gebunh7q.apps.googleusercontent.com">
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap/dist/css/bootstrap.min.css" />
     <link type="text/css" rel="stylesheet" href="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.css" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
     <link href="https://fonts.googleapis.com/css?family=Charmonman" rel="stylesheet">
     <link rel="stylesheet" href="css/vueWysiwyg.css">
-    <link rel="stylesheet" href="css/style.css">
-    
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <link rel="stylesheet" href="css/style.css"> 
 
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <title>CurhatanQ</title>
 </head>
 
@@ -28,7 +25,7 @@
             </div>
             <div style="width:40%; height: 100%;" class="d-flex flex-column justify-content-center">
                 <login-card @login="login" v-on:change-auth="changeAuth" v-if="wantLogin"></login-card>
-                <register-card @register="register" v-on:change-auth="changeAuth" v-if="!wantLogin"></register-card>
+                <register-card @register="login" v-on:change-auth="changeAuth" v-if="!wantLogin"></register-card>
             </div>
         </div>
         <div id="menuView" class="mainView d-flex flex-row justify-content-center align-items-center" v-if="viewId===2">
@@ -52,12 +49,12 @@
         </div>
         <div id="myCurhatsView" class="mainView" v-if="viewId===4">
             <back-navigation title="My Curhats"></back-navigation>
-            <curhat-list @show-pdf="showPdf" v-bind:curhats="myCurhats"></curhat-list>
+            <curhat-list @show-pdf="showPdf" :candelete="true" @delete-success="deleteSuccess" v-bind:curhats="myCurhats"></curhat-list>
 
         </div>
         <div id="publicCurhatsView" class="mainView" v-if="viewId===5">
             <back-navigation title="Public Curhats"></back-navigation>
-            <curhat-list @show-pdf="showPdf" v-bind:curhats="publicCurhats"></curhat-list>
+            <curhat-list @show-pdf="showPdf" :candelete="false" @delete-success="deleteSuccess" v-bind:curhats="publicCurhats"></curhat-list>
         </div>
         <div class="mainView" v-if="viewId===6">
             <back-navigation title="Curhat Viewer"></back-navigation>
@@ -70,6 +67,7 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script src="//unpkg.com/bootstrap-vue@latest/dist/bootstrap-vue.min.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/jspdf@latest/dist/jspdf.min.js"></script>
 
     <!-- register components-->
 
