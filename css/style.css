@@ -1,0 +1,95 @@
+body {
+    background-image: url("../images/curhat-bg.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    margin: 0;
+    padding: 0;
+  }
+
+
+  .col-centered{
+    float: none;
+    margin: 0 auto;
+ }
+ .myauthcard{
+     width: 400px;
+     margin: 0 auto;
+ }
+ .mainView{
+     height: 100%;
+ }
+ #app-title{
+  font-family: 'Charmonman', cursive;
+  font-weight: bold;
+  font-size: 80px
+ }
+#app{
+    width: 100vw;
+    height: 100vh;
+}
+.curhat-card{
+    width: 190px;
+    padding: 20px;
+    background-color: white;
+}
+.curhat-card a{
+    color: black;
+    font-size: 30px
+}
+#form-curhat{
+  background-color: white;
+  padding-left: 5%;
+  padding-right: 5%;
+  color: black
+}
+
+.icon-large{
+    font-size: 100px
+}
+.icon-med{
+    font-size: 50px
+}
+.icon-med:hover{
+    font-size: 53px;
+    color: white;
+}
+
+
+
+.glow:hover {
+    -webkit-animation: glow 1s ease-in-out infinite alternate;
+    -moz-animation: glow 1s ease-in-out infinite alternate;
+    animation: glow 1s ease-in-out infinite alternate;
+  }
+  
+  @-webkit-keyframes glow {
+    from {
+      text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #e60073, 0 0 40px #e60073, 0 0 50px #e60073, 0 0 60px #e60073, 0 0 70px #e60073;
+    }
+    to {
+      text-shadow: 0 0 20px #fff, 0 0 30px #ff4da6, 0 0 40px #ff4da6, 0 0 50px #ff4da6, 0 0 60px #ff4da6, 0 0 70px #ff4da6, 0 0 80px #ff4da6;
+    }
+  }
+
+a.social-link {
+	display:inline;
+	background-color: #aaa;
+	color:#fff !important;
+	text-decoration:none;
+	padding:6px 12px;
+	margin: 0;
+}
+#facebook-share:hover {
+	color:#4a66b7;
+}
+#twitter-share:hover {
+	color:#00acee;
+}
+#linkedin-share:hover {
+	color:#1b86bc;
+}
+#gplus-share:hover {
+	color:#dd4b38;
+}
